@@ -23,7 +23,7 @@ The aim of this project is to contribute to the advancement of time series forec
 * GRU
 
 # Evaluation Metrics
-There are a totla of 13 evaluation metrics
+There are a total of 13 evaluation metrics
 ## Machine Learning based evaluation metrics
 * MAPE (mean absolute percentage error)
 * ME (mean error)
