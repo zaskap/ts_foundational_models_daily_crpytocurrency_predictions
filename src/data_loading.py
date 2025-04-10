@@ -65,13 +65,16 @@ def preprocess_data(df):
     Returns
     -------
         pd.DataFrame: Processed DataFrame.
+        scaler: Scaler object
     """
     if df is None:
         return None
     if 'Open' not in df.columns or 'Close' not in df.columns:
         print("Error: 'Open' or 'Close' columns not found in DataFrame.")
         return None
-    return df[['Open', 'Close']].sort_index()
+    return df[["Open","Close"]].sort_index()
+
+
 
 def split_data(df, train_end_date):
     """Splits the data into training and testing sets.

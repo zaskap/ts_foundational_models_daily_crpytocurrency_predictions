@@ -4,7 +4,6 @@ import timesfm
 
 from src.data_loading import load_crypto_data, preprocess_data, split_data
 from models.timesfm_wrapper import TimesFMForecaster
-from src.evaluation_metrics import *
 import os
 from config.config import DATA_DIR
 
@@ -47,7 +46,7 @@ def forecast_crypto_prices(crypto_symbols, data_dir, train_end_date="2023-12-31"
         frequency_input = [0]
 
         #The horizon_len same as the test_data size (366 days - whole year of 2024)
-        forecaster = TimesFMForecaster(hparams=timesfm.TimesFmHparams(horizon_len=test_df.shape[0]))
+        forecaster = TimesFMForecaster(hparams=timesfm.TimesFmHparams(horizon_len=7))
         try:
             point_forecast, _ = forecaster.forecast(history_list, frequency_input)
             forecast_dates = pd.date_range(start=test_df.index.min(), periods=len(point_forecast[0]), freq='D')
@@ -55,7 +54,7 @@ def forecast_crypto_prices(crypto_symbols, data_dir, train_end_date="2023-12-31"
 
             # Save actual and forecasted values
             output_df = test_df[['Close']].join(forecast_df, how='left')
-            output_file_path = os.path.join(OUTPUTS_DIR, f'{symbol}_forecasts.csv')
+            output_file_path = os.path.join(OUTPUTS_DIR, f'{symbol}_{timesfm}_forecasts_1y.csv')
             output_df.to_csv(output_file_path)
             all_results[symbol] = output_df
 

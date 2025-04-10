@@ -6,8 +6,8 @@ import pandas as pd
 OUTPUTS_DIR = os.path.join(DATA_DIR, 'outputs')
 os.makedirs(OUTPUTS_DIR, exist_ok=True)
 
-def evaluate_forecasts(output_dir, crypto_symbols, forecasted_value_col = "Forecasted_Close",
-                       actual_value_col = "Close"):
+def evaluate_forecasts(output_dir, crypto_symbols, model = "timesfm", forecasted_value_col = "Forecasted_Close",
+                       actual_value_col = "Close", test_data_date = "2024-01-01"):
     """Evaluates the forecasts for train and test data separately.
 
     Parameters
@@ -24,11 +24,13 @@ def evaluate_forecasts(output_dir, crypto_symbols, forecasted_value_col = "Forec
     """
     evaluation_metrics_all = {}
     for symbol in crypto_symbols:
-        forecast_result_path = os.path.join(output_dir, f"{symbol}_forecasts.csv")
+        forecast_result_path = os.path.join(output_dir, f"{symbol}_{model}_forecasts.csv")
         forecast_df = pd.read_csv(forecast_result_path)
 
         if forecast_df is None:
             continue
+
+        forecast_df = forecast_df[forecast_df["Date"] >= test_data_date]
 
         evaluation_metrics_all[symbol] = {}
 
@@ -60,7 +62,9 @@ def evaluate_forecasts(output_dir, crypto_symbols, forecasted_value_col = "Forec
 if __name__ == '__main__':
     # Evaluate the forecasts
     crypto_symbols = ['BTC-USD', 'BNB-USD', 'ETH-USD', 'SOL-USD']
-    evaluation_results = evaluate_forecasts(OUTPUTS_DIR, crypto_symbols, "Forecasted_Close", "Close")
+    evaluation_results = evaluate_forecasts(OUTPUTS_DIR, crypto_symbols, model = "timesfm"
+                                            , forecasted_value_col = "Forecasted_Close", actual_value_col = "Close"
+                                            , test_data_date = "2024-01-01")
 
     # Print the evaluation results
     print("\nEvaluation Results:")
