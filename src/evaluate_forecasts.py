@@ -30,34 +30,46 @@ def evaluate_forecasts(output_dir, crypto_symbols, model = "timesfm", forecasted
         if forecast_df is None:
             continue
 
-        forecast_df = forecast_df[forecast_df["Date"] >= test_data_date]
 
         evaluation_metrics_all[symbol] = {}
 
-        # Evaluate on Test Data
-        evaluation_metrics_all[symbol]['test'] = {}
-        test_actual = forecast_df[actual_value_col].dropna().values
-        test_predicted = forecast_df[forecasted_value_col].dropna().values
+        evaluation_metrics_all[symbol] = evaluate_forecast_one_symbol(forecast_df,
+            forecasted_value_col = forecasted_value_col, actual_value_col = actual_value_col, test_data_date = test_data_date)
 
-        if len(test_actual) > 0 and len(test_predicted) > 0 and len(test_actual) == len(test_predicted):
-            evaluation_metrics_all[symbol]['test']['MAPE'] = calculate_mape(test_actual, test_predicted)
-            evaluation_metrics_all[symbol]['test']['ME'] = calculate_me(test_actual, test_predicted)
-            evaluation_metrics_all[symbol]['test']['MAE'] = calculate_mae(test_actual, test_predicted)
-            evaluation_metrics_all[symbol]['test']['MPE'] = calculate_mpe(test_actual, test_predicted)
-            evaluation_metrics_all[symbol]['test']['RMSE'] = calculate_rmse(test_actual, test_predicted)
-            evaluation_metrics_all[symbol]['test']['R'] = calculate_r(test_actual, test_predicted)
-            evaluation_metrics_all[symbol]['test']['Scalar Product'] = calculate_scalar_product(test_actual, test_predicted)
-            evaluation_metrics_all[symbol]['test']['Return Score'] = calculate_return_score(test_actual, test_predicted)
-            evaluation_metrics_all[symbol]['test']['Long Return'] = calculate_long_return(test_actual, test_predicted)
-            evaluation_metrics_all[symbol]['test']['Short Return'] = calculate_short_return(test_actual, test_predicted)
-            evaluation_metrics_all[symbol]['test']['Mean Directional Accuracy'] = calculate_mean_directional_accuracy(test_actual, test_predicted)
-            evaluation_metrics_all[symbol]['test']['Mean Directional Accuracy Positive'] = calculate_mean_directional_accuracy_positive(test_actual, test_predicted)
-            evaluation_metrics_all[symbol]['test']['Mean Directional Accuracy Negative'] = calculate_mean_directional_accuracy_negative(test_actual, test_predicted)
-        else:
-            evaluation_metrics_all[symbol]['test']['error'] = "Insufficient or mismatched data for evaluation."
 
     return evaluation_metrics_all
 
+def evaluate_forecast_one_symbol(forecast_df, forecasted_value_col = "Forecasted_Close", actual_value_col = "Close"
+                                 , test_data_date = "2024-01-01"):
+    """Evaluates the forecasts for a single cryptocurrency.
+    """
+    forecast_df = forecast_df[forecast_df["Date"] >= test_data_date]
+
+    evaluation_metrics = {}
+
+    # Evaluate on Test Data
+    evaluation_metrics['test'] = {}
+    test_actual = forecast_df[actual_value_col].dropna().values
+    test_predicted = forecast_df[forecasted_value_col].dropna().values
+
+    if len(test_actual) > 0 and len(test_predicted) > 0 and len(test_actual) == len(test_predicted):
+        evaluation_metrics['test']['MAPE'] = calculate_mape(test_actual, test_predicted)
+        evaluation_metrics['test']['ME'] = calculate_me(test_actual, test_predicted)
+        evaluation_metrics['test']['MAE'] = calculate_mae(test_actual, test_predicted)
+        evaluation_metrics['test']['MPE'] = calculate_mpe(test_actual, test_predicted)
+        evaluation_metrics['test']['RMSE'] = calculate_rmse(test_actual, test_predicted)
+        evaluation_metrics['test']['R'] = calculate_r(test_actual, test_predicted)
+        evaluation_metrics['test']['Scalar Product'] = calculate_scalar_product(test_actual, test_predicted)
+        evaluation_metrics['test']['Return Score'] = calculate_return_score(test_actual, test_predicted)
+        evaluation_metrics['test']['Long Return'] = calculate_long_return(test_actual, test_predicted)
+        evaluation_metrics['test']['Short Return'] = calculate_short_return(test_actual, test_predicted)
+        evaluation_metrics['test']['Mean Directional Accuracy'] = calculate_mean_directional_accuracy(test_actual, test_predicted)
+        evaluation_metrics['test']['Mean Directional Accuracy Positive'] = calculate_mean_directional_accuracy_positive(test_actual, test_predicted)
+        evaluation_metrics['test']['Mean Directional Accuracy Negative'] = calculate_mean_directional_accuracy_negative(test_actual, test_predicted)
+    else:
+        evaluation_metrics['test']['error'] = "Insufficient or mismatched data for evaluation."
+    
+    return evaluation_metrics
 
 if __name__ == '__main__':
     # Evaluate the forecasts
