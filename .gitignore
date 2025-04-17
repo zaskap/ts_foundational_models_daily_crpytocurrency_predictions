@@ -177,3 +177,6 @@ cython_debug/
 # Data Files:
 *.csv
 *data*/
+
+#lighting logs
+notebooks/lightning_logs/
