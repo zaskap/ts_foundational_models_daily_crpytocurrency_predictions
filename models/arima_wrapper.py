@@ -46,19 +46,19 @@ class AutoARIMAWrapper:
         point_forecast = self.model.predict(fh=fh, X=X_future)
         return point_forecast.values, None
     
-# Uncomment the following lines to test the code with sample data
-# Sample time series data
-index = pd.date_range("2023-01-01", periods=200, freq="D")
-history_data_single = pd.Series(np.random.randn(200).cumsum(), index=index)
+# # Uncomment the following lines to test the code with sample data
+# # Sample time series data
+# index = pd.date_range("2023-01-01", periods=200, freq="D")
+# history_data_single = pd.Series(np.random.randn(200).cumsum(), index=index)
 
-# Model Initialization
-model_params = {"sp":1, "d":None, "max_p":5, "max_q":5}
-arima_forecaster = AutoARIMAWrapper(model_params)
+# # Model Initialization
+# model_params = {"sp":1, "d":None, "max_p":5, "max_q":5}
+# arima_forecaster = AutoARIMAWrapper(model_params)
 
-# Model Fitting
-arima_forecaster.fit(history_data_single)
+# # Model Fitting
+# arima_forecaster.fit(history_data_single)
 
-# Forecasting
-forecasting_horizon = 7
-point_forecast_arima, _ = arima_forecaster.forecast(forecasting_horizon=forecasting_horizon)
-print("ARIMA Point Forecast:", point_forecast_arima)
+# # Forecasting
+# forecasting_horizon = 7
+# point_forecast_arima, _ = arima_forecaster.forecast(forecasting_horizon=forecasting_horizon)
+# print("ARIMA Point Forecast:", point_forecast_arima)
