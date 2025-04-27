@@ -17,6 +17,7 @@ class ChronosWrapper:
         ----------
         history_data (pd.Series or pd.DataFrame): Historical time series data.
         frequency (str, optional): Frequency of the time series. Defaults to None.
+        X_exog (pd.DataFrame, optional): Exogenous variables for the historical data. Defaults to None.
         future_index (pd.Index, optional): Index for the forecast horizon. If None, a relative horizon is used. Defaults to None.
         X_future (pd.DataFrame, optional): Exogenous variables for the forecast horizon. Defaults to None.
 
@@ -54,8 +55,8 @@ class ChronosWrapper:
 # print("Chronos Multi-Variable Point Forecast:", point_forecast_chronos_multi)
 
 
-# # Sample time series data with exogenous variables and future index
-# chronos_forecaster = ChronosWrapper(forecasting_horizon=7, model_params = {"model_path":"amazon/chronos-t5-tiny"})
+# Sample time series data with exogenous variables and future index
+# chronos_forecaster = ChronosWrapper(forecasting_horizon=7, model_params = {"model_path":"amazon/chronos-t5-tiny", "seed":42})
 # index = pd.date_range("2023-01-01", periods=200, freq="D")
 # history_data_multi = pd.DataFrame({
 #     "target": np.random.randn(200).cumsum(),

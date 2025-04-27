@@ -26,9 +26,11 @@ class MoiraiWrapper:
         """
         # Assuming history_data contains both target (y) and exogenous (X) if applicable
         if isinstance(history_data, pd.DataFrame):
+            print("Exogenous variables detected in history_data.")
             y = history_data.iloc[:, 0] # Assuming the first column is the target
             X_train = history_data.iloc[:, 1:] if history_data.shape[1] > 1 else None
         else:
+            print("No exogenous variables detected in history_data.")
             y = history_data
             X_train = None
 
@@ -43,11 +45,25 @@ class MoiraiWrapper:
         return point_forecast.values, None
     
 
-moirai_forecaster = MoiraiWrapper(forecasting_horizon=7, model_params = {"checkpoint_path" : "sktime/moirai-1.0-R-small", "context_length": 512, "deterministic":True})
+# # Testing the MOIRAI class
+# moirai_forecaster = MoiraiWrapper(forecasting_horizon=7, model_params = {"checkpoint_path" : "sktime/moirai-1.0-R-small", "context_length": 512, "deterministic":True})
 
-# Sample time series data
-index = pd.date_range("2023-01-01", periods=200, freq="D")
-history_data_single = pd.Series(np.random.randn(200).cumsum(), index=index)
+# index = pd.date_range("2023-01-01", periods=200, freq="D")
+# history_data_single = pd.Series(np.random.randn(200).cumsum(), index=index)
 
-point_forecast_moirai, _ = moirai_forecaster.forecast(history_data_single)
-print("MOIRAI Point Forecast:", point_forecast_moirai)
+# point_forecast_moirai, _ = moirai_forecaster.forecast(history_data_single)
+# print("MOIRAI Point Forecast:", point_forecast_moirai)
+
+
+# # Sample time series data with exogenous variables
+# moirai_forecaster = MoiraiWrapper(forecasting_horizon=7, model_params = {"checkpoint_path" : "sktime/moirai-1.0-R-small", "context_length": 512, "deterministic":True})
+# index = pd.date_range("2023-01-01", periods=200, freq="D")
+# history_data_multi = pd.DataFrame({
+#     "target": np.random.randn(200).cumsum(),
+#     "exog1": np.random.randn(200)
+# }, index=index)
+# point_forecast_moirai_future_without_exog, _ = moirai_forecaster.forecast(history_data_multi["target"])
+# print("MOIRAI without exogenous variable Point Forecast:", point_forecast_moirai_future_without_exog)
+
+# point_forecast_moirai_future_with_exog, _ = moirai_forecaster.forecast(history_data_multi[["target","exog1"]])
+# print("MOIRAI with exogenous variable Point Forecast:", point_forecast_moirai_future_with_exog)
