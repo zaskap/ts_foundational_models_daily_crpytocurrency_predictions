@@ -20,7 +20,8 @@ The aim of this project is to contribute to the advancement of time series forec
 
 # Benchmark Models
 * ARIMA
-* GRU
+* LSTM
+* Prophet
 
 # Evaluation Metrics
 There are a total of 13 evaluation metrics
